@@ -9,8 +9,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Build Docker image
-      run: docker build -t nodeapp .
+    - uses: actions/checkout@v4
+    - name: login to Dockerhub
+      uses: actions/checkout@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        token   : ${{ secrets.DOCKER_TOKEN }}
+    - name: Build and push Docker image
+      run: docker buiold -t workdevharsh/nodeapp:latest .
+    - name: push docker image in docker hub
+      run: docker push workdevharsh/nodeapp:latest

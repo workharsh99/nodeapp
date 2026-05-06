@@ -1,0 +1,23 @@
+name: deploy to ec2
+on:
+  workflow_run:
+    workflows: ["Docker CI"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: deploy to ec2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            docker pull workdevharsh/nodeapp:latest
+            docker stop nodeapp || true
+            docker rm nodeapp || true
+            docker run -d --name nodeapp -p 80:3000 workdevharsh/nodeapp:latest

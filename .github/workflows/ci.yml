@@ -19,7 +19,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Docker image
-      run: docker build -t workdevharsh/nodeapp .
+      run: docker build -t workdevharsh/nodeapp:latest .
 
     - name: Push Docker image
-      run: docker push workdevharsh/nodeapp
+      run: docker push workdevharsh/nodeapp:latest
